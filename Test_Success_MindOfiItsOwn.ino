@@ -61,18 +61,6 @@ int getDistance() {
   return distance;
 
   
-
-//  if (distance >= 200 || distance <= 0) {
-//    Serial.println("Out of range");
-//    Serial.println(distance);
-//  }
-//  else {
-//    Serial.print(distance);
-//    Serial.println(" cm");
-//    return distance;
-//  }
-
-  //return -1;
 }
 
 //////////////////////////////////////////////////////
@@ -105,8 +93,7 @@ void objectCheck() {
 
   } else {
 
-    move(1, 0, BACKWARD); // stop motors
-    move(2, 0, BACKWARD);
+    stop();
 
     delay(100);// 5 second delay 
 
@@ -160,12 +147,12 @@ int checkLeft() {
 
   reverse();
 
-  move(2, 0, FORWARD);
+  move(2, 175, FORWARD);
+  move(1, 175, BACKWARD);
 
   delay(500);
   
-  move(1, 0, BACKWARD);
-  move(2, 0, BACKWARD);
+  stop();
 
   int distLeft = getDistance();
 
@@ -179,19 +166,18 @@ int checkRight() {
 
   delay(500);
 
-  move(1, 0, BACKWARD);
-  move(2, 0, BACKWARD);
+  stop();
 
   delay(1000);
 
   move(1, 175, FORWARD);
+  move(2, 175, BACKWARD);
 
   //move(2, 0, BACKWARD);
 
   delay(800);
   
-  move(1, 0, BACKWARD);
-  move(2, 0, BACKWARD);
+  stop();
 
   int distRight = getDistance();
 
@@ -214,11 +200,11 @@ void origin(char direction) {
       // if checkLeft() is called
 
       move(2, 175, BACKWARD);
+      move(1, 175, FORWARD);
 
       delay(500);
     
-    move(1, 0, BACKWARD);
-      move(2, 0, BACKWARD);
+      stop();
 
       break;
 
@@ -227,11 +213,12 @@ void origin(char direction) {
       // if checkRight is to be called
 
       move(1, 175, BACKWARD);
+      move(2, 255, FORWARD);
 
       delay(500);
     
-      move(1, 0, BACKWARD);
-      move(2, 0, BACKWARD);
+      stop();
+     
       
       break;
 
@@ -255,11 +242,7 @@ char distanceCalculation(int distLeft, int distRight) {
 
   }
 
-  //else if(distLeft == distRight){
-
-  //return 'B';
-
-  // }
+  
 
 
 }
@@ -270,14 +253,16 @@ void moveLeft() {
 
   delay(500);
 
-  move(2, 255, FORWARD);//CHANGED IT NOW
+  move(2, 255, FORWARD);
+  move(1, 255, BACKWARD);
+  
 
   delay(500);
 
-  move(1, 0,BACKWARD);
-  move(1, 0,BACKWARD);
+  stop();
 
   move(2, 255, FORWARD);
+  move(1, 255, BACKWARD);
   
   Drive();
 
@@ -289,16 +274,18 @@ void moveLeft() {
 
 void moveRight() {
 
- delay(500);
+  delay(500);
 
   move(1, 255, FORWARD);
+  move(2, 255, BACKWARD);
+  
 
   delay(500);
 
-  move(2, 0,BACKWARD);
-  move(2, 0,BACKWARD);
+  stop();
 
   move(1, 255, FORWARD);
+  move(2, 255, BACKWARD);
   
   Drive();
 
@@ -324,6 +311,8 @@ void reverse() {
     move(2, 175, BACKWARD);
 
     delay(500);
+
+    stop();
 
   //check();
 
