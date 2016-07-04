@@ -12,6 +12,7 @@ const int FORWARD = 0 ;
 
 const int Indicator_Left = 2;
 const int Indicator_Right = 4;
+const int Indicator = 1;
 
 
 const int Buzz_Pin_13 = 13;
@@ -42,6 +43,7 @@ void setup() {
   pinMode(Indicator_Left, OUTPUT);
   pinMode(Indicator_Right, OUTPUT);
   pinMode(Buzz_Pin_13, OUTPUT);
+  pinMode(Indicator, OUTPUT);
 
   Serial.begin (9600);
   pinMode(trigPin, OUTPUT);
@@ -322,6 +324,8 @@ void moveRight() {
 
 void Drive() {
 
+
+  digitalWrite(Indicator, true);
   move(LEFT_WHEELS, FULL_SPEED, FORWARD);
   move(RIGHT_WHEELS, FULL_SPEED, FORWARD);
 
