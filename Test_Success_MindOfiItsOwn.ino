@@ -7,8 +7,14 @@
 //motor A connected between A01 and A02
 //motor B connected between B01 and B02
 
-const int BACKWARD = 0;
-const int FORWARD = 1 ; 
+const int BACKWARD = 1;
+const int FORWARD = 0 ;
+
+const int Indicator_Left = 2;
+const int Indicator_Right = 4;
+
+
+const int Buzz_Pin_13 = 13;
 
 int STBY = 10; //standby
 
@@ -33,6 +39,10 @@ void setup() {
   pinMode(BIN1, OUTPUT);
   pinMode(BIN2, OUTPUT);
 
+  pinMode(Indicator_Left, OUTPUT);
+  pinMode(Indicator_Right, OUTPUT);
+  pinMode(Buzz_Pin_13, OUTPUT);
+
   Serial.begin (9600);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
@@ -56,11 +66,11 @@ int getDistance() {
 
   distance = (duration / 2) / 29.1;
 
-  Serial.println(distance); 
+  Serial.println(distance);
 
   return distance;
 
-  
+
 }
 
 //////////////////////////////////////////////////////
@@ -95,7 +105,7 @@ void objectCheck() {
 
     stop();
 
-    delay(100);// 5 second delay 
+    delay(100);// 5 second delay
 
     int distLeft = checkLeft();
 
@@ -147,11 +157,19 @@ int checkLeft() {
 
   reverse();
 
-  move(2, 175, FORWARD);
-  move(1, 175, BACKWARD);
+  for (int counter = 0; counter < 3; counter++) {
+
+    digitalWrite(Indicator_Left, true);
+    delay(500);
+    digitalWrite(Indicator_Left, false);
+    delay(800);
+  }
+
+  move(RIGHT_WHEELS, FULL_SPEED, FORWARD);
+  move(LEFT_WHEELS, FULL_SPEED, BACKWARD);
 
   delay(500);
-  
+
   stop();
 
   int distLeft = getDistance();
@@ -170,13 +188,22 @@ int checkRight() {
 
   delay(1000);
 
-  move(1, 175, FORWARD);
-  move(2, 175, BACKWARD);
+
+  for (int counter = 0; counter < 3; counter++) {
+
+    digitalWrite(Indicator_Right, true);
+    delay(500);
+    digitalWrite(Indicator_Right, false);
+    delay(800);
+  }
+
+  move(LEFT_WHEELS, FULL_SPEED, FORWARD);
+  move(RIGHT_WHEELS, FULL_SPEED, BACKWARD);
 
   //move(2, 0, BACKWARD);
 
   delay(800);
-  
+
   stop();
 
   int distRight = getDistance();
@@ -199,11 +226,11 @@ void origin(char direction) {
 
       // if checkLeft() is called
 
-      move(2, 175, BACKWARD);
-      move(1, 175, FORWARD);
+      move(RIGHT_WHEELS, FULL_SPEED, BACKWARD);
+      move(LEFT_WHEELS, FULL_SPEED, FORWARD);
 
       delay(500);
-    
+
       stop();
 
       break;
@@ -212,14 +239,14 @@ void origin(char direction) {
 
       // if checkRight is to be called
 
-      move(1, 175, BACKWARD);
-      move(2, 255, FORWARD);
+      move(LEFT_WHEELS, FULL_SPEED, BACKWARD);
+      move(RIGHT_WHEELS, FULL_SPEED, FORWARD);
 
       delay(500);
-    
+
       stop();
-     
-      
+
+
       break;
 
   }
@@ -242,7 +269,7 @@ char distanceCalculation(int distLeft, int distRight) {
 
   }
 
-  
+
 
 
 }
@@ -253,20 +280,20 @@ void moveLeft() {
 
   delay(500);
 
-  move(2, 255, FORWARD);
-  move(1, 255, BACKWARD);
-  
+  move(RIGHT_WHEELS, FULL_SPEED, FORWARD);
+  move(LEFT_WHEELS, FULL_SPEED, BACKWARD);
+
 
   delay(500);
 
   stop();
 
-  move(2, 255, FORWARD);
-  move(1, 255, BACKWARD);
-  
+  move(RIGHT_WHEELS, FULL_SPEED, FORWARD);
+  move(LEFT_WHEELS, FULL_SPEED, BACKWARD);
+
   Drive();
 
-  
+
 
 }
 
@@ -276,17 +303,17 @@ void moveRight() {
 
   delay(500);
 
-  move(1, 255, FORWARD);
-  move(2, 255, BACKWARD);
-  
+  move(LEFT_WHEELS, FULL_SPEED, FORWARD);
+  move(RIGHT_WHEELS, FULL_SPEED, BACKWARD);
+
 
   delay(500);
 
   stop();
 
-  move(1, 255, FORWARD);
-  move(2, 255, BACKWARD);
-  
+  move(LEFT_WHEELS, FULL_SPEED, FORWARD);
+  move(RIGHT_WHEELS, FULL_SPEED, BACKWARD);
+
   Drive();
 
 }
@@ -295,8 +322,8 @@ void moveRight() {
 
 void Drive() {
 
-  move(1, 255, FORWARD);
-  move(2, 255, FORWARD);
+  move(LEFT_WHEELS, FULL_SPEED, FORWARD);
+  move(RIGHT_WHEELS, FULL_SPEED, FORWARD);
 
 
 }
@@ -305,14 +332,23 @@ void Drive() {
 
 void reverse() {
 
+  delay(500);
+
+  move(LEFT_WHEELS, FULL_SPEED, BACKWARD);
+  move(RIGHT_WHEELS, FULL_SPEED, BACKWARD);
+
+  for (int counter = 0; counter < 3; counter++) {
+
+    tone(Buzz_Pin_13, 1500, 500);
+    delay(200);
+    tone(Buzz_Pin_13, 800, 500);
     delay(500);
 
-    move(1, 175, BACKWARD);
-    move(2, 175, BACKWARD);
+  }
 
-    delay(500);
+  delay(500);
 
-    stop();
+  stop();
 
   //check();
 
